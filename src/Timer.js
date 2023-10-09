@@ -1,28 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './Timer.css'
 
 var interval;
-
 class Timer extends Component {
-    
+  
     constructor () {
         super();
         this.state = {
           time: 10,
         };
       }
-    
-    componentDidMount(){
+      handleTimeStart = () => {
         interval = setInterval(()=>{
-            this.setState({
-              time: this.state.time - 1
-            });
-          },1000);
+          this.setState({
+            time: this.state.time - 1
+          });
+        },1000);
+      }
+      handleTimeStop = () => {
+        clearInterval(interval);
+      }
+    componentDidMount(){
+        this.handleTimeStart();
     }
 
     componentDidUpdate(){
         if( this.state.time === 0){
-            clearInterval(interval);
+            this.handleTimeStop();
         }
     }
     
@@ -35,9 +39,19 @@ class Timer extends Component {
             )
         }else{
             return(
-                <h2 className="timer">
-                  00:00:0{this.state.time}
-                </h2>
+                <Fragment>
+                  <h2 className="timer">
+                    00:00:0{this.state.time}
+                  </h2>
+                  <div>
+                    <button onClick={this.handleTimeStart}>
+                      start
+                    </button>
+                    <button onClick={this.handleTimeStop}>
+                      stop
+                    </button>
+                  </div>
+                </Fragment>
               );
         }
         
